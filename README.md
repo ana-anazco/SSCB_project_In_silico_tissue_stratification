@@ -53,4 +53,4 @@ G -.-> I[tissue composition estimmation]
 
 ------
 
-Work under supervision of ([prof. Matthias Futschik](https://github.com/MatthiasFutschik)) and Sofia Torres.
+Work under supervision of [prof. Matthias Futschik](https://github.com/MatthiasFutschik) and Sofia Torres.
