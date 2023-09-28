@@ -31,7 +31,7 @@ The following flowchart summarizes our approach, with solid lines representing t
 
 
 ````mermaid
-flowchart TD
+graph TD
 %% problem, solid line %%
 A((tissue sample)) ===> B[Bulk RNA-seq] 
 B ---> E[unkown % cell type]
