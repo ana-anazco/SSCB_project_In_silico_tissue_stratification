@@ -30,7 +30,7 @@ For the sake of simplicity and time-efficiency, we design a neural network with 
 The following flowchart summarizes our approach, with solid lines representing the problem flow and dashed lines indicating our proposed solution:
 
 
-````mermaid
+```mermaid
 graph TD
 %% problem, solid line %%
 A((tissue sample)) ===> B[Bulk RNA-seq] 
