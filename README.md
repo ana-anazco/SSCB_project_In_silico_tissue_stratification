@@ -1,33 +1,33 @@
-# SSCB project _In_silico_ tissue stratification
+# In silico tissue stratification using machine learning  
+**Authors:** Ana Añazco Guenkova and Leonardo Mendes-Silva
 
-This repository serves as the deliverable for our assignment project during the [Summer School in Computational Biology](https://www.uc.pt/en/events/computationalbiology/) at the Universidade de Coimbra in September 2023. The project aims to address an important challenge in computational biology: predicting the percentage of each cell type within bulk tissue samples. This prediction is valuable for reducing result interpretation bias and optimizing sequencing costs.
+**Context:** Mini-project developed as part of [Summer School in Computational Biology](https://www.uc.pt/en/events/computationalbiology/) at the University of Coimbra in September 2023
 
 ## The challenge 
+Biological samples, whether from healthy or diseased tissues, consist of varying proportions of distinct cell types. This cellular composition can strongly influence the identification of differentially expressed genes.  
 
-Biological samples, in different health conditions (healthy and disease), may consist of varying numbers of distinct cell types. The composition of these cell types within a tissue can significantly impact the determination of differentially expressed genes. When analyzing tissue samples as a whole (bulk analysis), gene expression values are averaged across all cells within the sample. However, if individual cells within the same tissue are sequenced (single-cell analysis), it becomes possible to determine the expression of each gene by cell type. This introduces a critical challenge: relative gene expression from bulk data may not reveal differences between conditions, potentially leading to biased result interpretation and/or identification of false negatives or false positive. For example, if we do not know the percentage of each cell type in the sample, then we cannot infer if the changes in gene expression are due to changes in the molecular processes within the cells or due to shifts in cellular composition.
+In bulk RNA-seq, gene expression values represent an average across all cells within a sample, potentially masking differences between conditions or introducing bias when cell-type proportions differ. In contrast, single-cell RNA-seq allows gene expression profiling at the individual cell level, enabling the identification of expression changes specific to particular cell types.  
 
-In essence, the challenge aims to solve two problems:
-- **Reduced Bias in Interpretation:** Accurate estimation of cell type composition within a bulk-RNA tissue sample enables us to mitigate the bias introduced by cell type variations when identifying differentially expressed genes.
-- **Optimizing Sequencing Costs:** Precise cell type composition prediction can help optimize sequencing resources by reducing the need for costly single-cell RNA-seq experiments, especially when such information can be inferred from bulk RNA-seq data.
+This challenge addresses two key problems:  
+- **Reducing interpretation bias:** Estimating cell-type composition within bulk RNA-seq samples mitigates confounding effects due to varying cell populations when identifying differentially expressed genes.  
+- **Optimizing sequencing costs:** Reliable cell-type composition prediction can reduce the need for expensive single-cell RNA-seq experiments by inferring this information directly from bulk data.  
 
-### Data Resources
-
-For this assignment, we leverage data related to Huntington's disease from publicly available publications:
+## Data resources  
+The project used publicly available data related to Huntington’s disease from the following studies:  
 
 |publication | data source | GEO | Organism
 |:-:|:-: |:-:|:-:|
 |[Hodges et al 2006]([link](https://pubmed.ncbi.nlm.nih.gov/16467349/)) |bulk RNA (Affymetrix)  |[GSE3790](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE3790) | *H. sapiens*|
 |[Matsushima et al 2023]([link](https://pubmed.ncbi.nlm.nih.gov/36650127/)) |single-cells RNA-seq (Illumina) | [GSE152058](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152058) |*H. sapiens*
 
-### Our approach
+## Our approach
+We proposed a **machine learning framework** to predict the percentage of each cell type within bulk RNA-seq samples.  
 
-To tackle thi challenge, we initially envisioned an ideal experiment scenario: dividing each tissue sample equally. One part would undergo bulk analysis, while the other would undergo single-cell analysis. This would provide insights into how single cells contribute to the overall gene expression by examining differences in gene expression for identified cell types. However, for obvious reasons, this experiment is out of the scope of the course, and our stating point was the available data mentioned above.
+First, single-cell RNA-seq data were used to estimate cell-type proportions and calculate aggregated gene expression profiles representative of bulk data. These profiles were used as input features for model training, with the corresponding cell-type percentages serving as target variables.  
 
-Nowing that, we propose a machine learning approach. Specifically, we plan to train a neural network to learn the weights of each gene while considering tissue composition (the percentage of each cell type) as the target variable. Using our single-cell sample data, we calculate the percentage of each cell type in the tissue and the corresponding gene expression levels. Subsequently, we compute an overall expression value for each gene, considering all cells within that gene's group. This gene expression matrix becomes our input for the neural network, formatted similarly to the bulk tissue sample data.
+To address this task, we implemented a **neural network with two layers**, where the number of nodes matched the number of genes. The final layer used a `softmax()` activation to generate probability distributions for each cell type, ensuring that the predicted values summed to one. These probabilities represent the estimated percentage of each cell type within a given bulk tissue sample.  
 
-For the sake of simplicity and time-efficiency, we design a neural network with two layers, with the number of nodes equal to the number of genes. The final layer employs a `softmax()` function, yielding probabilities for each cell type. Since our target variables are matrices representing cell compositions, where the `sum()` equals 1, these probabilities represent the estimated percentage of each cell type within the tissue, derived from the bulk RNA data.
-
-The following flowchart summarizes our approach, with solid lines representing the problem flow and dashed lines indicating our proposed solution:
+The figure below summarizes the proposed approach, where solid lines represent the problem workflow and dashed lines indicate the proposed solution.  
 
 ```mermaid
 graph TD
@@ -51,5 +51,8 @@ G -.-> I[tissue composition estimmation]
 ```
 
 ------
+## Learning outcomes  
+This project provided hands-on experience in applying neural networks to biological data, focusing on model design, evaluation, and biological interpretation. It also reinforced the importance of integrating single-cell and bulk RNA-seq data to address biases in transcriptomic analyses.  
 
-Work under supervision of [prof. Matthias Futschik](https://github.com/MatthiasFutschik) and Sofia Torres(/fistorres).
+## Acknowledgements  
+Developed during the *SSCB* course (2024) under the supervision of [prof. Matthias Futschik](https://github.com/MatthiasFutschik) and Sofia Torres(/fistorres).
